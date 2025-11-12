@@ -1,7 +1,9 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
-import productsRoutes from "../shop/routes/productRoutes.js"
+// import productsRoutes from "../shop/routes/productRoutes.js"
+import userRoutes from "../shop/routes/user_routes.js"
+import userProductRoutes from "../shop/routes/user_product_routes.js"
 
 const app = express()
 
@@ -11,7 +13,9 @@ dotenv.config()
 const PORT = process.env.PORT || 5000
 const MONGOURL =process.env.MONGO_URL
 
-app.use("/product",productsRoutes)
+// app.use("/product",productsRoutes)
+app.use("/user",userRoutes)
+app.use("/userProduct",userProductRoutes)
 
 mongoose.connect(MONGOURL).then(()=>{
     console.log("Database connected")

@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import Users from "./user_model.js"
 
 const productSchema = new mongoose.Schema({
     name :{
@@ -9,19 +10,33 @@ const productSchema = new mongoose.Schema({
     price:{
         type:Number,
         required: true,
+        min:[0,"Price Must be positive number"]
     },
     category:{
         type:String,
-        lowercase:true
+        lowercase:true,
+        trim: true,
+        default: "general"
     },
     description:{
         type:String,
-        required:true
+        required:true,
+        trim: true,
     },
     instock:{
         type: Boolean,
         required: true
     },
+    createdAt: {
+    type: Date,
+    default: Date.now
+  },
+
+//   connect product and user
+    user:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users"
+    }
 })
 
 const Product =mongoose.model("Product",productSchema)
