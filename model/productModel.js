@@ -35,7 +35,8 @@ const productSchema = new mongoose.Schema({
 //   connect product and user
     user:{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Users"
+    ref: "Users",
+    required: true
     }
 })
 
