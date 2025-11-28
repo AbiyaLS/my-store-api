@@ -1,6 +1,4 @@
 import mongoose from "mongoose"
-import Users from "./user_model.js"
-
 const productSchema = new mongoose.Schema({
     name :{
         type: String,
