@@ -11,7 +11,7 @@ export const createProducts = async (req, res)=>{
     }
 }
 // get all products
-export const getAllProducts = async (req,res)=>{
+export const getAllProducts = async (req,res)=>{    
     try{
     const products = await Product.find()
     if(products.length === 0){
@@ -72,89 +72,121 @@ export const deleteProduct = async (req,res)=>{
           return res.status(400).json({error: error.message})
      }
 }
+// pagination
+export const getProductsWithLimit = async (req,res) => {
+    try {
+     const page = parseInt(req.query.page) || 1
+     const limit =parseInt(req.query.limit) || 2
+     const search =req.query.search?.trim() || ""
+
+    //  search filter
+    const query =search 
+    ? {name : {$regex : search ,$options : "i"}}
+    : {}
+
+     const totalCount =await Product.countDocuments(query)
+     const totalPage = Math.ceil(totalCount / limit)
+
+     const products = await Product.find(query)
+     .skip((page - 1) * limit)
+     .limit(limit)
+     res.status(200).json({
+        page,
+        limit,
+        totalCount,
+        totalPage,
+        products
+     })
+    } catch (error) {
+        res.status(500).json({ message: "Failed to fetch products" });
+    }
+}
+
+
+
 
 // Filter by priceMin (GET /product?priceMin=1000)
 
-export const getProductsByMinPrice = async (req, res) => {
-  try {
-      const priceMin = req.query.priceMin
-      const filter={}
+// export const getProductsByMinPrice = async (req, res) => {
+//   try {
+//       const priceMin = req.query.priceMin
+//       const filter={}
       
-      if(priceMin){
-        const min =Number(priceMin)
-        if(isNaN(min)){
-            res.status(400).json({message: "priceMin Must be number"})
-        }
-        if(min <= 0){
-            res.status(400).json({message: "priceMin Must be positive"})
-        }
-        filter.price ={$gte : min}
-      }
-      const products = await Product.find(filter)
-      res.status(200).json(products)
-  } catch (error) {
-        res.status(500).json({ error: error.message });   
-  }
-};
+//       if(priceMin){
+//         const min =Number(priceMin)
+//         if(isNaN(min)){
+//             res.status(400).json({message: "priceMin Must be number"})
+//         }
+//         if(min <= 0){
+//             res.status(400).json({message: "priceMin Must be positive"})
+//         }
+//         filter.price ={$gte : min}
+//       }
+//       const products = await Product.find(filter)
+//       res.status(200).json(products)
+//   } catch (error) {
+//         res.status(500).json({ error: error.message });   
+//   }
+// };
 
 // Get all products that belong to a specific category
-export const getProductByCategory =async (req,res)=>{
-    try {
-         const category = req.query.category
-         if(!category){
-            res.status(404).json({message: "Category required"})
-         }
-         const products = await Product.find({
-            category : category.toLowerCase()
-         })
-         res.status(200).json(products)
-    } catch (error) {
-        res.status(500).json({ error: error.message });  
-    }
-}
+// export const getProductByCategory =async (req,res)=>{
+//     try {
+//          const category = req.query.category
+//          if(!category){
+//             res.status(404).json({message: "Category required"})
+//          }
+//          const products = await Product.find({
+//             category : category.toLowerCase()
+//          })
+//          res.status(200).json(products)
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });  
+//     }
+// }
 
 // search the product using name
-export const searchProductByName = async (req,res)=>{
-    try {
-        const name =req.query.name
-        if(!name){
-           res.status(404).json({message: "Name required"}) 
-        }
-        const product = await Product.find({
-            name : {$regex : name.toLowerCase(), $options : "i"}
-        })
-        res.status(200).json(product)
-    } catch (error) {
-        res.status(500).json({ error: error.message });  
-    }
-}
-// get all the elememt from name andprice field
-export const getNameAndPrice =async (req,res)=>{
-    try {
-        const products = await Product.find({},{name:1,price:1,category:1,_id:0})
-        res.status(200).json(products)
-    } catch (error) {
-        res.status(500).json({ error: error.message });  
-    }
-}
-export const getSortedPagination = async (req,res)=>{
-    try {
-        const page =Number(req.query.page) || 1
-        const limit = Number(req.query.limit) ||3
-        const sortBy =req.query.sortBy || "price"
-        const order = req.query.order === "desc" ? -1 : 1
+// export const searchProductByName = async (req,res)=>{
+//     try {
+//         const name =req.query.name
+//         if(!name){
+//            res.status(404).json({message: "Name required"}) 
+//         }
+//         const product = await Product.find({
+//             name : {$regex : name.toLowerCase(), $options : "i"}
+//         })
+//         res.status(200).json(product)
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });  
+//     }
+// }
+// // get all the elememt from name andprice field
+// export const getNameAndPrice =async (req,res)=>{
+//     try {
+//         const products = await Product.find({},{name:1,price:1,category:1,_id:0})
+//         res.status(200).json(products)
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });  
+//     }
+// }
+// export const getSortedPagination = async (req,res)=>{
+//     try {
+//         const page =Number(req.query.page) || 1
+//         const limit = Number(req.query.limit) ||3
+//         const sortBy =req.query.sortBy || "price"
+//         const order = req.query.order === "desc" ? -1 : 1
 
-        const skip =(page -1) * limit
+//         const skip =(page -1) * limit
 
-        const product = await Product.find()
-        .sort({ [sortBy] : order })
-        .skip(skip)
-        .limit(limit)
+//         const product = await Product.find()
+//         .sort({ [sortBy] : order })
+//         .skip(skip)
+//         .limit(limit)
 
-        res.status(200).json(product)
-    } catch (error) {
-        res.status(500).json({ error: error.message }); 
-    }
-}
+//         res.status(200).json(product)
+//     } catch (error) {
+//         res.status(500).json({ error: error.message }); 
+//     }
+// }
 
 

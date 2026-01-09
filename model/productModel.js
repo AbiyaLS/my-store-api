@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     },
     instock:{
         type: Boolean,
-        required: true
+        default: false
     },
     createdAt: {
     type: Date,
@@ -34,7 +34,7 @@ const productSchema = new mongoose.Schema({
     user:{
     type: mongoose.Schema.Types.ObjectId,
     ref: "Users",
-    required: true
+   
     }
 })
 
