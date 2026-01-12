@@ -11,17 +11,17 @@ export const createProducts = async (req, res)=>{
     }
 }
 // get all products
-export const getAllProducts = async (req,res)=>{    
-    try{
-    const products = await Product.find()
-    if(products.length === 0){
-        return res.status(404).json({message : "NO PRODUCT AVAILABLE"})
-    }
-    res.status(200).json(products)
-    }catch(error){
-        return res.status(400).json({error: error.message})
-    }
-}
+// export const getAllProducts = async (req,res)=>{    
+//     try{
+//     const products = await Product.find()
+//     if(products.length === 0){
+//         return res.status(404).json({message : "NO PRODUCT AVAILABLE"})
+//     }
+//     res.status(200).json(products)
+//     }catch(error){
+//         return res.status(400).json({error: error.message})
+//     }
+// }
 
 //update product details
 export const productsUpdate = async (req,res)=>{
@@ -73,7 +73,7 @@ export const deleteProduct = async (req,res)=>{
      }
 }
 // pagination
-export const getProductsWithLimit = async (req,res) => {
+export const getProducts = async (req,res) => {
     try {
      const page = parseInt(req.query.page) || 1
      const limit =parseInt(req.query.limit) || 2

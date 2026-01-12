@@ -1,8 +1,15 @@
 import React from 'react'
 
-export default function ProductForm({products,setProducts,error,setError}) {
+export default function ProductForm({
+    type,
+    onSubmit,
+    products,
+    setProducts,
+    error,
+    setError  
+}) {
   return (
-    <div>
+    <form onSubmit={onSubmit}>
       <div className='flex flex-col '><label>Product Name</label>
             <input 
              className='bg-blue-200 p-1.5 rounded-xl'
@@ -11,8 +18,8 @@ export default function ProductForm({products,setProducts,error,setError}) {
              value={products.name}
              onChange={(e)=>{
                 setProducts({...products,name:e.target.value})
-                setError({...error,name:""})}}/>
-                
+                setError({...error,name:""})}}
+            />
                 {error.name && (
                     <p className='text-red-500 text-sm'>{error.name}</p>
                 )}
@@ -25,8 +32,8 @@ export default function ProductForm({products,setProducts,error,setError}) {
              value={products.description}
              onChange={(e)=>{
                 setProducts({...products,description:e.target.value})
-                setError({...error,description:""})}}/>
-                
+                setError({...error,description:""})}}
+            />
                 {error.description && (
                     <p className='text-red-500 text-sm'>{error.description}</p>
                 )}
@@ -40,12 +47,18 @@ export default function ProductForm({products,setProducts,error,setError}) {
              value={products.price}
              onChange={(e)=>{
                 setProducts({...products,price:e.target.value})
-                setError({...error,price: ""})}}/>
+                setError({...error,price: ""})}}
+            />
                 
                 {error.price && (
                     <p className='text-red-500 text-sm'>{error.price}</p>
                 )}
         </div>
-    </div>
+         <button 
+         type='submit' 
+         className='bg-blue-400 p-2 rounded-2xl mt-2 font-semibold'>
+            {type === "add" ? "Create Product" : "Update Product"}
+        </button>
+    </form>
   )
 }

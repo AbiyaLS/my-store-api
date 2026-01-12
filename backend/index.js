@@ -1,25 +1,24 @@
 import express from "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
-import productsRoutes from "../shop/routes/productRoutes.js"
-import userRoutes from "../shop/routes/user_routes.js"
-// import userProductRoutes from "../shop/routes/user_product_routes.js"
-import reviewRoutes from "../shop/routes/review_routes.js"
 import cors from "cors"
+import cookieParser from "cookie-parser" 
+import productsRoutes from "../backend/routes/productRoutes.js"
+import authRoutes from "../backend/routes/auth/authRoutes.js"
+import { authMiddleware } from "./middleware/authMiddleware.js"
 
 const app = express()
 dotenv.config()
-app.use(express.json())
-app.use(cors())
 
+app.use(cors())
+app.use(express.json())
+app.use(cookieParser())
 
 const PORT = process.env.PORT || 5000
 const MONGOURL =process.env.MONGO_URL
 
 app.use("/product",productsRoutes)
-// app.use("/user",userRoutes)
-// app.use("/userProduct",userProductRoutes)
-// app.use("/review",reviewRoutes)
+app.use("/auth",authRoutes)
 
 mongoose.connect(MONGOURL).then(()=>{
     console.log("Database connected")

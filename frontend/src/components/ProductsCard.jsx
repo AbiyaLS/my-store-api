@@ -2,17 +2,16 @@ import React from 'react'
 import formatedDate from '../lib/utils'
 import { Link } from 'react-router'
 import { SquarePen, Trash2 } from 'lucide-react'
-import API_URL from '../lib/constant'
+
 import toast from 'react-hot-toast'
+import api from '../lib/axios'
 
 export default function ProductsCard({product,setProducts}) {
 // ---------------------Handle delete------------------
     const handleDelete =async(e,id)=>{
         e.preventDefault();
         try {
-           await fetch(`${API_URL}/${id}`,{
-            method: "DELETE"
-           }) 
+           await api.delete(`/product/${id}`)
            setProducts((prev)=>prev.filter((p)=>p._id !== id))
            toast.success("Delete Successfully")
         } catch (error) {

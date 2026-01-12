@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react"
-import API_URL from "../lib/constant"
 import toast from "react-hot-toast"
 import ProductForm from "../components/ProductForm"
 import { Link, useNavigate, useParams } from "react-router"
+import api from "../lib/axios"
+import { validation } from "../lib/validation"
 
 export default function Detail() {
   const [products, setProducts] = useState({
@@ -12,20 +13,19 @@ export default function Detail() {
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState({})
+  const [ error, setError] = useState({})
+  
 
   const navigate = useNavigate()
   const { id } = useParams()
 
   // ---------- fetch product ----------
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = async () => {
       try {
-        const res = await fetch(`${API_URL}/${id}`)
-        const data = await res.json()
+        const res = await api.get(`/product/${id}`)
         setProducts({
-          ...data,
-          price: String(data.price ?? "")
+          ...res.data,
+          price: String(res.data.price ?? "")
         })
       } catch {
         toast.error("Something went wrong while fetching")
@@ -33,37 +33,27 @@ export default function Detail() {
         setLoading(false)
       }
     }
+
+  useEffect(() => {
     fetchData()
   }, [id])
 
-  // ---------- validation ----------
-  const validate = () => {
-    let newError = {}
-
-    if (!products.name.trim()) newError.name = "Name is required"
-    if (!products.description.trim())
-      newError.description = "Description is required"
-    if (!products.price.trim()) newError.price = "Price is required"
-
-    setError(newError)
-    return Object.keys(newError).length === 0
-  }
-
+ 
   // ---------- save (ONCLICK) ----------
-  const handleSave = async () => {
-    console.log("button clicked")
+  const handleSave = async (e) => {
+     e.preventDefault();
 
-    if (!validate()) return
+     const newErrors = validation(products);
+      if (Object.keys(newErrors).length > 0) {
+          setError(newErrors);
+           return;
+      }
 
     setSaving(true)
     try {
-      await fetch(`${API_URL}/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...products,
+      await api.put(`/product/${id}`,{
+        ...products,
           price: Number(products.price)
-        })
       })
 
       toast.success("Product updated successfully")
@@ -92,22 +82,16 @@ export default function Detail() {
             Product Details
           </h1>
 
-          {/* NO FORM */}
           <ProductForm
+            type="Edit"
+            onSubmit={handleSave}
             products={products}
             setProducts={setProducts}
             error={error}
             setError={setError}
+            
           />
-
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={saving}
-            className="bg-blue-400 p-2 rounded-2xl mt-3 font-semibold"
-          >
-            {saving ? "Saving..." : "Save Changes"}
-          </button>
+ 
         </div>
       </div>
     </div>

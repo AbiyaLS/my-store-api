@@ -12,10 +12,12 @@ const userSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
-    createAt:{
-        type: Date,
-        default: Date.now
-    }
-})
+    password:{
+        type: String,
+        required: true,
+        minlength: 4
+    },   
+},
+{timestamps: true})
 const Users = mongoose.model("Users",userSchema)
 export default Users
