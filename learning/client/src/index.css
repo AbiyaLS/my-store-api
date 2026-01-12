@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+.container {
+  width: 80px; //16px
+  height: 40px;
+  background-color: red;
+}
+
+.parent {
+  display: block;
+  justify-content: space-arou;
+  align-items: center;
+}
