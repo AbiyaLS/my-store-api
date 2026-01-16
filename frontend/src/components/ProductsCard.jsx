@@ -1,10 +1,9 @@
 import React from 'react'
 import formatedDate from '../lib/utils'
-import { Link } from 'react-router'
 import { SquarePen, Trash2 } from 'lucide-react'
-
 import toast from 'react-hot-toast'
 import api from '../lib/axios'
+import { Link } from 'react-router-dom'
 
 export default function ProductsCard({product,setProducts}) {
 // ---------------------Handle delete------------------

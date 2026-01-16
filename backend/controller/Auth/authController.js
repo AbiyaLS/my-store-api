@@ -1,7 +1,17 @@
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
-import dotenv from "dotenv"
 import Users from "../../model/user_model.js"
+
+export const authCheck =async (req,res)=> {
+    try {
+       console.log("Auth checking")
+       return res.status(200).json({ message : "Authenication User Entered" }); 
+    } catch (error) {
+        console.log("error happended in authCheck")
+       res.status(500).json({message: "Server Error", error}) 
+    }
+
+}
 
 export const register = async (req,res) =>{
     try {
@@ -47,18 +57,18 @@ export const login = async (req,res) => {
         const { email, password } = req.body
         
         if(!email || !password){
-            return res.status(404).json({message: "All Field required"})
+            return res.status(401).json({message: "All Field required"})
         }
         
         const user = await Users.findOne({ email })
         if(!user){
-            return res.status(404).json({message : "Invalid email and password"})
+            return res.status(401).json({message : "Invalid email and password"})
         }
         // Compare usrer password with hashed password
         const isMatch = await bcrypt.compare(password, user.password)
 
         if(!isMatch){
-            return res.status(404).json({message: "Invalid email and password"})
+            return res.status(401).json({message: "Invalid email and password"})
         }
         // Create Token
         const token = jwt.sign(
@@ -68,8 +78,9 @@ export const login = async (req,res) => {
         )
 
         res.cookie("myToken",token,{
-             httpOnly: true,
-             sameSite: "none",
+            httpOnly: true,
+            sameSite: "lax",
+            secure: false,
         })
 
         return res.status(200).json({message: "Login Successfully",token: token})

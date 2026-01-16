@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import toast from "react-hot-toast"
-import ProductForm from "../components/ProductForm"
-import { Link, useNavigate, useParams } from "react-router"
+import ProductForm from "../components/form/ProductForm"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import api from "../lib/axios"
 import { validation } from "../lib/validation"
 

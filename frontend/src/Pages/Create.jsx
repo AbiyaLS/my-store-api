@@ -1,10 +1,11 @@
 import React from 'react'
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router'
+
 import toast from 'react-hot-toast'
-import ProductForm from '../components/ProductForm'
+import ProductForm from '../components/form/ProductForm'
 import api from '../lib/axios'
 import { validation } from '../lib/validation'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function Create() {
     

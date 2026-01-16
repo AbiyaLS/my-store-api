@@ -1,7 +1,7 @@
 import { Search } from 'lucide-react'
 import React from 'react'
 import { useState } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 export default function Navbar({onSearch}) {
   const [ searchText, setSearchText ] = useState("")

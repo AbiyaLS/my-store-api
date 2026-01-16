@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import ProductsCard from "../components/ProductsCard";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
-
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
