@@ -25,14 +25,11 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    createdAt: {
-    type: Date,
-    default: Date.now
-  },
 
 //   connect product and user
     user:{
     type: mongoose.Schema.Types.ObjectId,
+    required: true,
     ref: "Users",
    
     }

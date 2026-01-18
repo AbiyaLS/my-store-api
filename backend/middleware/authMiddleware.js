@@ -11,7 +11,7 @@ export function authMiddleware(req,res, next){
     }
     try {
         const decoded = jwt.verify(token, process.env.JWt_SECERT)
-        req.myUserId = decoded.userId
+        req.userId = decoded.userId
         next()
     } catch (error) {
         return res.status(401).json({ message: "Unauthorized.Please Login" });

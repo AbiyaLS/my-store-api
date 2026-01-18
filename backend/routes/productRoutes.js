@@ -1,7 +1,10 @@
 import express from "express"
 import {  deleteProduct, getProductById, productsUpdate, createProducts, getProducts } from "../controller/product_controller.js"
+import { authMiddleware } from "../middleware/authMiddleware.js"
 
 const router = express.Router()
+
+router.use(authMiddleware)
 
 // create Products
 router.post("/",createProducts)

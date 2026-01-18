@@ -5,7 +5,7 @@ import Users from "../../model/user_model.js"
 export const authCheck =async (req,res)=> {
     try {
        console.log("Auth checking")
-       return res.status(200).json({ message : "Authenication User Entered" }); 
+       return res.status(200).json({ message : "Authenication User Entered", userId : req.userId }); 
     } catch (error) {
         console.log("error happended in authCheck")
        res.status(500).json({message: "Server Error", error}) 
