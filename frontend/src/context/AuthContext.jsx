@@ -13,7 +13,7 @@ export default function AuthProvider({ children }) {
 
     const checkAuth = async () => {
         try {
-            await api.get('auth/me')
+            await api.get('/auth/me')
             setIsLoggined(true)
         } catch (error) {
             setIsLoggined(false)

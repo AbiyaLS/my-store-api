@@ -1,19 +1,17 @@
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
-export function authMiddleware(req,res, next){
-    console.log("Middleware reached")
-    console.log("req.cookies",req.cookies)
+export function authMiddleware(req, res, next) {
+  const token = req.cookies.myToken;
 
-    const token = req.cookies.myToken
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 
-    if(!token){
-        return res.status(401).json({ message: "Unauthorized"})
-    }
-    try {
-        const decoded = jwt.verify(token, process.env.JWt_SECERT)
-        req.userId = decoded.userId
-        next()
-    } catch (error) {
-        return res.status(401).json({ message: "Unauthorized.Please Login" });
-    }
+  try {
+    const decoded = jwt.verify(token, process.env.JWt_SECERT);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Unauthorized. Please login" });
+  }
 }
